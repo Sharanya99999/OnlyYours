@@ -1,1 +1,167 @@
 # OnlyYours
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Women Room</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #ffe6f2;
+        padding: 0;
+        margin: 0;
+        color: #333;
+    }
+
+    header {
+        background: #ff99c8;
+        padding: 20px;
+        text-align: center;
+        color: white;
+        font-size: 32px;
+        font-weight: bold;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 700px;
+        margin: 20px auto;
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+
+    label {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    select {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+    }
+
+    textarea {
+        width: 100%;
+        height: 140px;
+        padding: 15px;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        margin-top: 10px;
+    }
+
+    button {
+        width: 100%;
+        padding: 14px;
+        background: #ff66a3;
+        color: white;
+        font-size: 18px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    button:hover {
+        background: #ff4d88;
+    }
+
+    .notes-section {
+        margin-top: 25px;
+    }
+
+    .note-box {
+        background: #fff0f6;
+        padding: 12px;
+        margin: 10px 0;
+        border-left: 5px solid #ff66a3;
+        border-radius: 8px;
+    }
+
+    h3 {
+        margin-top: 30px;
+        color: #cc3366;
+    }
+</style>
+</head>
+
+<body>
+
+<header>Women Room</header>
+
+<div class="container">
+    <label>Select Your Mood</label>
+
+    <select id="mood">
+        <option value="">Choose mood…</option>
+        <option value="Happy">Happy ✨</option>
+        <option value="Sad">Sad 💧</option>
+        <option value="Angry">Angry 🔥</option>
+        <option value="Confused">Confused 😵‍💫</option>
+        <option value="Healing">Healing 🌿</option>
+    </select>
+
+    <label>Write Your Letter / Note</label>
+    <textarea id="note" placeholder="Write your feelings here…"></textarea>
+
+    <button onclick="saveNote()">Save Note</button>
+
+    <div id="notesOutput" class="notes-section"></div>
+</div>
+
+<script>
+    function saveNote() {
+        const mood = document.getElementById("mood").value;
+        const note = document.getElementById("note").value;
+
+        if (!mood) {
+            alert("Please choose a mood ❤️");
+            return;
+        }
+        if (!note.trim()) {
+            alert("Write something in the box ❤️");
+            return;
+        }
+
+        let notes = JSON.parse(localStorage.getItem("womenRoomNotes") || "{}");
+
+        if (!notes[mood]) {
+            notes[mood] = [];
+        }
+
+        notes[mood].push(note);
+        localStorage.setItem("womenRoomNotes", JSON.stringify(notes));
+
+        document.getElementById("note").value = "";
+        displayNotes();
+    }
+
+    function displayNotes() {
+        const container = document.getElementById("notesOutput");
+        const notes = JSON.parse(localStorage.getItem("womenRoomNotes") || "{}");
+
+        container.innerHTML = "";
+
+        for (let mood in notes) {
+            const moodHeader = `<h3>${mood} Notes</h3>`;
+            let moodNotes = "";
+
+            notes[mood].forEach(n => {
+                moodNotes += `<div class="note-box">${n}</div>`;
+            });
+
+            container.innerHTML += moodHeader + moodNotes;
+        }
+    }
+
+    displayNotes();
+</script>
+
+</body>
+</html>
